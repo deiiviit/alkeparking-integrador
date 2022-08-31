@@ -27,9 +27,11 @@ data class ParkingSpace(var vehicle: Vehicle) {
    */
 
     private fun calculateFee():Int{
-        println("time ${parkedTime.microseconds}")
-        if(parkedTime.minutes> 120.toDuration(DurationUnit.MINUTES)){
+
+        println("time ${vehicle.checkInTime.timeInMillis}  ${Calendar.getInstance().timeInMillis}  La diferencia es ${parkedTime} minutos")
+        if(parkedTime> 120){
             val plus= ((parkedTime.minutes.minus(120.toDuration(DurationUnit.MINUTES))).div(15.toDuration(DurationUnit.MINUTES)))*5
+            //println("plus $plus  ${plus.toInt()}")
             return vehicle.type.value + plus.toInt()
         }else{
              return vehicle.type.value

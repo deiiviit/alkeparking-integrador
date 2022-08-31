@@ -1,11 +1,17 @@
 package com.example.alkeparking_integrador
 
 import java.util.*
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
 
 fun main() {
     //se crean objetos de prueba, para validar que no se exceda del cupo máximo permitido ni que repita placa
-    val car = Vehicle("AA111AA", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car1 = Vehicle("AA111AB", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
+
+    val fecha = Calendar.getInstance()
+    fecha.set(Calendar.MINUTE, -120)
+
+    val car = Vehicle("AA111AA", VehicleType.CAR, fecha, "DISCOUNT_CARD_001")
+    val car1 = Vehicle("AA111AB", VehicleType.CAR, fecha, "DISCOUNT_CARD_001")
     val car2 = Vehicle("AA111AC", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
     val car3 = Vehicle("AA111AD", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
     val car4 = Vehicle("AA111AE", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
