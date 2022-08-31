@@ -8,7 +8,6 @@ fun main() {
     val minibus = Vehicle("CA111AA", VehicleType.MINIBUS, Calendar.getInstance(), "DISCOUNT_CARD_002")
     val bus = Vehicle("DA111AA", VehicleType.BUS, Calendar.getInstance())
     val parking = Parking(mutableSetOf(car,moto,minibus,bus))
-
 //    val busCopy = Vehicle("DA111AA", VehicleType.BUS, Calendar.getInstance())
 //    val bus2 = Vehicle("FA111AA", VehicleType.BUS, Calendar.getInstance())
 
