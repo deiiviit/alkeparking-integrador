@@ -6,15 +6,11 @@ data class Parking(val vehicles: MutableSet<Vehicle>) {
 
     val listParkingSpace= mutableListOf<ParkingSpace>()
 
-
     fun initOrResetParkingSpaces(){
         vehicles.forEach {
             val parkingSpaceAux = ParkingSpace(it)
             listParkingSpace.add(parkingSpaceAux)
         }
     }
-
-
-
 }
 
