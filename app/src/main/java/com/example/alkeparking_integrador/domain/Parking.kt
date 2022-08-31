@@ -1,4 +1,5 @@
-package com.example.alkeparking_integrador
+package com.example.alkeparking_integrador.modelo
+
 
 // El set admites unicos, no pueden ver 2 vehiculos en el la misma plate
 

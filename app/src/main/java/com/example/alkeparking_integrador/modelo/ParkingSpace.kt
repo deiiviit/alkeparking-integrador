@@ -1,4 +1,4 @@
-package com.example.alkeparking_integrador
+package com.example.alkeparking_integrador.modelo
 
 import java.util.*
 

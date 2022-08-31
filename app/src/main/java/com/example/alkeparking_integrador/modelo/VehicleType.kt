@@ -1,4 +1,4 @@
-package com.example.alkeparking_integrador
+package com.example.alkeparking_integrador.modelo
 
 enum class VehicleType(val value: Int) {
     CAR(20),
