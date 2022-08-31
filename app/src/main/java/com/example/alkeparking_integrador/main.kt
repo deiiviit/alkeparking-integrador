@@ -1,37 +1,23 @@
 package com.example.alkeparking_integrador
 
 import java.util.*
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
 
 fun main() {
     //se crean objetos de prueba, para validar que no se exceda del cupo máximo permitido ni que repita placa
-
+    val dif=-135
     val fecha = Calendar.getInstance()
-    fecha.set(Calendar.MINUTE, -120)
+    fecha.add(Calendar.MINUTE, dif)
 
     val car = Vehicle("AA111AA", VehicleType.CAR, fecha, "DISCOUNT_CARD_001")
-    val car1 = Vehicle("AA111AB", VehicleType.CAR, fecha, "DISCOUNT_CARD_001")
+    val car1 = Vehicle("AA111AB", VehicleType.CAR, fecha)
     val car2 = Vehicle("AA111AC", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
     val car3 = Vehicle("AA111AD", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
     val car4 = Vehicle("AA111AE", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
     val car5 = Vehicle("AA111AF", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car6 = Vehicle("AA111AG", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car7 = Vehicle("AA111AH", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car8 = Vehicle("AA111AI", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car9 = Vehicle("AA111AJ", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car10 = Vehicle("AA111AK", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car11 = Vehicle("AA111AL", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car12 = Vehicle("AA111AM", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car13 = Vehicle("AA111AN", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car14 = Vehicle("AA111AO", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car15 = Vehicle("AA111AP", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car16 = Vehicle("AA111AQ", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car17 = Vehicle("AA111AR", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car18 = Vehicle("AA111AS", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car19 = Vehicle("AA111AT", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car20 = Vehicle("AA111AU", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
-    val car21 = Vehicle("AA111AA", VehicleType.CAR, Calendar.getInstance(), "DISCOUNT_CARD_001")
+
 
     //se crea el arreglo con los carros creados
     var vehiclesArray = arrayOf(
@@ -40,36 +26,26 @@ fun main() {
         car3,
         car4,
         car5,
-        car6,
-        car7,
-        car8,
-        car9,
-        car10,
-        car11,
-        car12,
-        car13,
-        car14,
-        car15,
-        car16,
-        car17,
-        car18,
-        car19,
-        car20,
-        car21
     )
 
     //Inicializo parking con mutableSet vacio
     val parking = Parking(mutableSetOf())
     //itero sobre el arreglo creado ypara ir añadiendo los carros
     vehiclesArray.forEach { println(parking.checkIn(it)) }
+    println()
 
-    //llamdo al metodo list vehicle
-    parking.listVehicles().forEach { println(it) }
+    println("IMPRESION DE SET \n")
+    parking.listVehicles().forEachIndexed { index, s -> println("Vehicle $index: Plate  $s") }
+    println("\n")
+    println("BORRADO CON UNA DIFERENCIA DE ${dif*-1} Minutos \n")
 
 
-    println("Borro el primer car  ${parking.delVehicle(car1)}")
+    parking.delVehicle(car)
+    println()
+    parking.delVehicle(car1)
 
-    println("Borro el primer car  ${parking.delVehicle(car2)}")//Este no esta adentro del parking
+    println()
+    parking.delVehicle(car2)
 
 
 
