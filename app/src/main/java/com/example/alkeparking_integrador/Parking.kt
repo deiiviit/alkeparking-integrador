@@ -33,15 +33,14 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
      * Metodo encargado de eliminar un vehiculo del mutableset y  llamar a checkout de parkingSpace
      */
      fun delVehicle(vehicle: Vehicle):Boolean{
+        parkingSpace= ParkingSpace(vehicle)
         if(vehicles.contains(vehicle)){
             vehicles.remove(vehicle)
-            parkingSpace= ParkingSpace(vehicle)
             parkingSpace?.let {
                 it.checkOutVehicle(vehicle.plate){it.onSuccess()}
             }
             return true
         }else{
-            parkingSpace= ParkingSpace(vehicle)
             parkingSpace?.let {
                 it.checkOutVehicle(vehicle.plate){it.onError()}
             }

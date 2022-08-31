@@ -31,7 +31,6 @@ fun main() {
     var vehiclesArray = arrayOf(
         car,
         car1,
-        car2,
         car3,
         car4,
         car5,
@@ -61,8 +60,10 @@ fun main() {
     //llamdo al metodo list vehicle
     parking.listVehicles().forEach { println(it) }
 
+
     println("Borro el primer car  ${parking.delVehicle(car1)}")
 
+    println("Borro el primer car  ${parking.delVehicle(car2)}")//Este no esta adentro del parking
 
 
 
