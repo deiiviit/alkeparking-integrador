@@ -27,5 +27,14 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
         }
         return false
     }
+
+    /**
+     * Metodo para listar vehiculos por placa
+     */
+    fun listVehicles(): MutableSet<String> {
+        val listPlates = mutableSetOf<String>()
+        vehicles.forEach { listPlates.add(it.plate) }
+        return listPlates
+    }
 }
 

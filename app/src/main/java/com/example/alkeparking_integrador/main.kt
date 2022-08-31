@@ -58,6 +58,9 @@ fun main() {
     //itero sobre el arreglo creado ypara ir añadiendo los carros
     vehiclesArray.forEach { println(parking.checkIn(it)) }
 
+    //llamdo al metodo list vehicle
+    parking.listVehicles().forEach { println(it) }
+
 
     //val moto = Vehicle("BA111AA", VehicleType.MOTORCYCLE, Calendar.getInstance())
     //val minibus = Vehicle("CA111AA", VehicleType.MINIBUS, Calendar.getInstance(), "DISCOUNT_CARD_002")
