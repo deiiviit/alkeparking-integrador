@@ -3,6 +3,8 @@ package com.example.alkeparking_integrador
 import java.util.*
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.microseconds
+import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -24,19 +26,18 @@ data class ParkingSpace(var vehicle: Vehicle) {
     }
    */
 
-    fun calculateFee(parkedTime:Long,type: VehicleType):Int{
-
+    private fun calculateFee():Int{
+        println("time ${parkedTime.microseconds}")
         if(parkedTime.minutes> 120.toDuration(DurationUnit.MINUTES)){
             val plus= ((parkedTime.minutes.minus(120.toDuration(DurationUnit.MINUTES))).div(15.toDuration(DurationUnit.MINUTES)))*5
-            return type.value + plus.toInt()
+            return vehicle.type.value + plus.toInt()
         }else{
-             return type.value
+             return vehicle.type.value
         }
-
     }
 
-    fun onSuccess(amount:Int){
-       println("Successful, the amount is:  $amount")
+    fun onSuccess(){
+       println("Successful, the amount is:  ${this.calculateFee()}")
    }
 
     fun onError(){
@@ -45,9 +46,11 @@ data class ParkingSpace(var vehicle: Vehicle) {
 
 
 
-    fun checkOutVehicle(plate:String,amount:Int?,operation:(Int?) ->String){
-        operation(amount)
+    fun checkOutVehicle(plate:String, operation:() ->Unit){
+        operation()
     }
+
+
 
 }
 

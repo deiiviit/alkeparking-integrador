@@ -5,13 +5,8 @@ package com.example.alkeparking_integrador
 const val MAXIMUM_CAPACITY: Int = 20
 data class Parking(var vehicles: MutableSet<Vehicle>) {
 
-    val listParkingSpace= mutableListOf<ParkingSpace>()
-    fun initOrResetParkingSpaces() {
-        vehicles.forEach {
-            val parkingSpaceAux = ParkingSpace(it)
-            listParkingSpace.add(parkingSpaceAux)
-        }
-    }
+    var parkingSpace:ParkingSpace?=null
+
     /**
      * Metodo encargado de la validacion de la placa y del llamado del método añadir vehiculo
      */
@@ -32,6 +27,26 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
             return true
         }
         return false
+    }
+
+    /**
+     * Metodo encargado de eliminar un vehiculo del mutableset y  llamar a checkout de parkingSpace
+     */
+     fun delVehicle(vehicle: Vehicle):Boolean{
+        if(vehicles.contains(vehicle)){
+            vehicles.remove(vehicle)
+            parkingSpace= ParkingSpace(vehicle)
+            parkingSpace?.let {
+                it.checkOutVehicle(vehicle.plate){it.onSuccess()}
+            }
+            return true
+        }else{
+            parkingSpace= ParkingSpace(vehicle)
+            parkingSpace?.let {
+                it.checkOutVehicle(vehicle.plate){it.onError()}
+            }
+            return false
+        }
     }
 
     /**

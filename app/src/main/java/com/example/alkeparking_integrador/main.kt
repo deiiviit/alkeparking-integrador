@@ -61,6 +61,10 @@ fun main() {
     //llamdo al metodo list vehicle
     parking.listVehicles().forEach { println(it) }
 
+    println("Borro el primer car  ${parking.delVehicle(car1)}")
+
+
+
 
     //val moto = Vehicle("BA111AA", VehicleType.MOTORCYCLE, Calendar.getInstance())
     //val minibus = Vehicle("CA111AA", VehicleType.MINIBUS, Calendar.getInstance(), "DISCOUNT_CARD_002")
