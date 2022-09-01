@@ -20,8 +20,8 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
         val vehicleFound = vehicles.find { it.plate == plate }
         vehicleFound?.let {
             val parkingSpace = ParkingSpace(it)
-            vehicles.remove(vehicleFound)
             parkingSpace.checkOutVehicle(plate)
+            vehicles.remove(vehicleFound)
         } ?: println("Sorry, the check-out failed")
     }
 
