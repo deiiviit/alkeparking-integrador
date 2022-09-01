@@ -11,7 +11,6 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
     private fun checkIn(vehicleAdded: Boolean) {
         if (vehicleAdded) {
             println("Welcome to AlkeParking!")
-
         } else {
             println("Sorry, the check-in failed")
         }
