@@ -10,24 +10,16 @@ data class ParkingSpace(var vehicle: Vehicle) {
     private val parkedTime: Long
         get() = (Calendar.getInstance().timeInMillis - vehicle.checkInTime.timeInMillis) / MINUTES_IN_MILLISECONDS
 
-    // Check if the vehicle was parked
-    fun checkIn(wasCarAdded: Boolean) {
-        if (wasCarAdded) {
-            println("Welcome to AlkeParking!")
 
-        } else {
-            println("Sorry, the check-in failed")
-        }
-    }
 
-    // Calculate the amount to pay
+    // Calculate the fee
     private fun calculateFee(
         vehicleType: VehicleType,
         parkedTime: Long,
-        hasDiscountCard: Boolean
+        discountCard: Boolean
     ): Int {
-        var fee = vehicleType.value + 5 * ceil(minutesExtra(parkedTime) / 15.0)
-        if (hasDiscountCard) {
+        var fee = vehicleType.value + 5 * ceil(timeExtra(parkedTime) / 15.0)
+        if (discountCard) {
             fee = ceil(fee * 0.85)
         }
         return fee.toInt()
@@ -44,7 +36,7 @@ data class ParkingSpace(var vehicle: Vehicle) {
     }
 
     // Calculate the extra minutes
-    private fun minutesExtra(parkedTime: Long): Double {
+    private fun timeExtra(parkedTime: Long): Double {
         return maxOf((parkedTime - 120).toDouble(), 0.0)
     }
 
