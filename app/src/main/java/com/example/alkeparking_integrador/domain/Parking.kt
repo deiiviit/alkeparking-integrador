@@ -1,4 +1,7 @@
-package com.example.alkeparking_integrador.modelo
+package com.example.alkeparking_integrador.domain
+
+import com.example.alkeparking_integrador.modelo.ParkingSpace
+import com.example.alkeparking_integrador.modelo.Vehicle
 
 
 // El set admites unicos, no pueden ver 2 vehiculos en el la misma plate
@@ -33,6 +36,25 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
             return true
         }
         return false
+    }
+
+    /**
+     * Metodo encargado de eliminar un vehiculo del mutableset y  llamar a checkout de parkingSpace
+     */
+     fun delVehicle(vehicle: Vehicle):Boolean{
+        var parkingSpace = ParkingSpace(vehicle)
+        if(vehicles.contains(vehicle)){
+            vehicles.remove(vehicle)
+            parkingSpace?.let {
+                it.checkOutVehicle(vehicle.plate){it.onSuccess()}
+            }
+            return true
+        }else{
+            parkingSpace?.let {
+                it.checkOutVehicle(vehicle.plate){it.onError()}
+            }
+            return false
+        }
     }
 
     /**
