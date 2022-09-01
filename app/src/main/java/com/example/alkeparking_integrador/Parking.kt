@@ -44,12 +44,13 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
         return vehicles.map { ("${it.plate} ") }
     }
 
+    // Calculate the total amount of money earned and the total number of vehicles
     private fun updateTotalRecord(parkingSpace: ParkingSpace) {
         val totalVehiclesChecked = totalRecord.first + 1
         val totalEarnings = totalRecord.second + (parkingSpace.fee ?: 0)
         totalRecord = totalRecord.copy(first = totalVehiclesChecked, second = totalEarnings)
     }
-
+    // Show the total amount of money earned and the total number of vehicles
     fun getTotalRecord() {
         println("${totalRecord.first} vehicles have checked out and have earnings of $${totalRecord.second}")
     }
