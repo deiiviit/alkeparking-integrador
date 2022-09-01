@@ -1,61 +1,49 @@
 package com.example.alkeparking_integrador
 
-import java.math.RoundingMode
 import java.util.*
-import kotlin.time.Duration.Companion.minutes
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
-
+import kotlin.math.ceil
 
 const val MINUTES_IN_MILLISECONDS = 60000
 
 data class ParkingSpace(var vehicle: Vehicle) {
+
     val parkedTime: Long
         get() = (Calendar.getInstance().timeInMillis - vehicle.checkInTime.timeInMillis) / MINUTES_IN_MILLISECONDS
 
-   /*
-    if(parking.vehicles.contains(vehicle)){
-        checkOutVehicle(vehicle.plate,amount,::onSuccess)
-    }else{
-        checkOutVehicle(vehicle.plate,amount,::onError)
-    }
-   */
 
-    private fun calculateFee():Int{
-
-        println("time ${vehicle.checkInTime.timeInMillis}  ${Calendar.getInstance().timeInMillis}  La diferencia es ${parkedTime} minutos")
-        if(parkedTime> 120){
-            val plus= ((parkedTime.minutes.minus(120.toDuration(DurationUnit.MINUTES))).div(15.toDuration(DurationUnit.MINUTES)))*5
-            vehicle.discountCard?.let{
-                return ((vehicle.type.value + plus.toInt())-(((vehicle.type.value + plus.toInt())*15)/100))
-            } ?: run{
-                return vehicle.type.value + plus.toInt()
-            }
-        }else{
-            vehicle.discountCard?.let{
-                return ((vehicle.type.value )-(((vehicle.type.value)*15)/100))
-            } ?: run{
-                return vehicle.type.value
-            }
+    // Calculate the fee
+    fun calculateFee(
+        vehicleType: VehicleType,
+        parkedTime: Long,
+        discountCard: Boolean
+    ): Int {
+        var fee = vehicleType.value + 5 * ceil(timeExtra(parkedTime) / 15.0)
+        if (discountCard) {
+            fee = ceil(fee * 0.85)
         }
+        return fee.toInt()
     }
 
-    fun onSuccess(){
-       println("Your fee is ${this.calculateFee()}. Come back soon.PLATE ${vehicle.plate} ")
-   }
-
-    fun onError(){
-        println("Sorry, the check-out failed PLATE ${vehicle.plate}")
+    // Give the final fee to pay
+    fun onSuccess(fee: Int) {
+        println("Your fee is: $$fee. Come back soon!")
     }
 
-
-
-    fun checkOutVehicle(plate:String, operation:() ->Unit){
-        operation()
+    // Error message
+    fun onError() {
+        println("Sorry, the check-out failed")
     }
 
+    // Calculate the extra minutes
+    private fun timeExtra(parkedTime: Long): Double {
+        return maxOf((parkedTime - 120).toDouble(), 0.0)
+    }
 
-
+    // Calculate the amount to pay and if the vehicle was parked or not
+    fun checkOutVehicle(plate: String) {
+        val fee = calculateFee(vehicle.type, parkedTime, vehicle.discountCard != null)
+        return onSuccess(fee)
+    }
 }
 
 
