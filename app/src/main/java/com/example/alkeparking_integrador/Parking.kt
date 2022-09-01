@@ -4,6 +4,8 @@ package com.example.alkeparking_integrador
 // Set contains the HashCode function, which makes sure the element is unique
 
 const val MAXIMUM_CAPACITY: Int = 20
+var totalRecord: Pair<Int, Int> = Pair(0, 0)
+
 
 data class Parking(var vehicles: MutableSet<Vehicle>) {
 
@@ -33,14 +35,23 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
         vehicleFound?.let {
             parkingSpace.checkOutVehicle(it.plate)
             vehicles.remove(vehicle)
+            updateTotalRecord(parkingSpace)
         } ?: parkingSpace.onError()
     }
 
     // list all vehicles
-    fun listVehicles() {
-        val listVehicles = vehicles.map { it.plate }
-        println("Vehicles in the parking: $listVehicles")
-        println("Total vehicles: ${vehicles.size}")
+    fun listVehicles(): List<String> {
+        return vehicles.map { ("${it.plate} ") }
+    }
+
+    private fun updateTotalRecord(parkingSpace: ParkingSpace) {
+        val totalVehiclesChecked = totalRecord.first + 1
+        val totalEarnings = totalRecord.second + (parkingSpace.fee ?: 0)
+        totalRecord = totalRecord.copy(first = totalVehiclesChecked, second = totalEarnings)
+    }
+
+    fun getTotalRecord() {
+        println("${totalRecord.first} vehicles have checked out and have earnings of $${totalRecord.second}")
     }
 }
 

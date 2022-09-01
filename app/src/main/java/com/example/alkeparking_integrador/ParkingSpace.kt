@@ -7,12 +7,14 @@ const val MINUTES_IN_MILLISECONDS = 60000
 
 data class ParkingSpace(var vehicle: Vehicle) {
 
+    var fee: Int? = null
+
     val parkedTime: Long
         get() = (Calendar.getInstance().timeInMillis - vehicle.checkInTime.timeInMillis) / MINUTES_IN_MILLISECONDS
 
 
     // Calculate the fee
-    fun calculateFee(
+    private fun calculateFee(
         vehicleType: VehicleType,
         parkedTime: Long,
         discountCard: Boolean
@@ -26,6 +28,7 @@ data class ParkingSpace(var vehicle: Vehicle) {
 
     // Give the final fee to pay
     fun onSuccess(fee: Int) {
+        this.fee = fee
         println("Your fee is: $$fee. Come back soon!")
     }
 
@@ -41,9 +44,11 @@ data class ParkingSpace(var vehicle: Vehicle) {
 
     // Calculate the amount to pay and if the vehicle was parked or not
     fun checkOutVehicle(plate: String) {
-        val fee = calculateFee(vehicle.type, parkedTime, vehicle.discountCard != null)
-        return onSuccess(fee)
+        if (vehicle.plate == plate) {
+            val fee = calculateFee(vehicle.type, parkedTime, vehicle.discountCard != null)
+            onSuccess(fee)
+        } else {
+            onError()
+        }
     }
 }
-
-
