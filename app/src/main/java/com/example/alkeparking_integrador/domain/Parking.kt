@@ -4,9 +4,15 @@ package com.example.alkeparking_integrador.modelo
 // El set admites unicos, no pueden ver 2 vehiculos en el la misma plate
 
 const val MAXIMUM_CAPACITY: Int = 20
-
 data class Parking(var vehicles: MutableSet<Vehicle>) {
 
+    val listParkingSpace= mutableListOf<ParkingSpace>()
+    fun initOrResetParkingSpaces() {
+        vehicles.forEach {
+            val parkingSpaceAux = ParkingSpace(it)
+            listParkingSpace.add(parkingSpaceAux)
+        }
+    }
     /**
      * Metodo encargado de la validacion de la placa y del llamado del método añadir vehiculo
      */
