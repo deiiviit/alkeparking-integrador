@@ -27,13 +27,13 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
     }
 
     // Remove vehicle from the parking
-    fun removeVehicle(plate: String) {
-        val vehicle = vehicles.find { it.plate == plate }
-        vehicle?.let {
-            val parkingSpace = ParkingSpace(it)
-            parkingSpace.checkOutVehicle(plate)
+    fun removeVehicle(vehicle: Vehicle) {
+        val parkingSpace = ParkingSpace(vehicle)
+        val vehicleFound = vehicles.find { it == vehicle }
+        vehicleFound?.let {
+            parkingSpace.checkOutVehicle(it.plate)
             vehicles.remove(vehicle)
-        } ?: println("Sorry, the check-out failed")
+        } ?: parkingSpace.onError()
     }
 
     // list all vehicles

@@ -5,7 +5,7 @@ import java.util.*
 fun main() {
     // set fake date to test
     val dateCheckIn = Calendar.getInstance()
-    dateCheckIn.set(Calendar.HOUR, 0)
+    dateCheckIn.add(Calendar.MINUTE, -121)
     println(dateCheckIn.time)
     val car = Vehicle("AA111AA", VehicleType.CAR, dateCheckIn)
     val car1 = Vehicle("AA111AB", VehicleType.CAR, dateCheckIn, "DISCOUNT_CARD_001")
@@ -23,16 +23,17 @@ fun main() {
         bus,
         )
 
-    //Initiate the parking lot
+    // Initiate the parking lot
     val parking = Parking(mutableSetOf())
 
     //iterate over the array of vehicles and add them to the parking lot
     vehiclesArray.forEach { parking.addVehicle(it) }
 
     // removes vehicles from the parking lot and run checkOut
-    parking.removeVehicle(car.plate)
-    parking.removeVehicle(car1.plate)
-    parking.removeVehicle(moto.plate)
+    parking.removeVehicle(car)
+    parking.removeVehicle(car1)
+    parking.removeVehicle(moto)
+    parking.removeVehicle(moto2)
 
     // print all the vehicles in the parking lot
     parking.listVehicles()
