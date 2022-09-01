@@ -1,5 +1,6 @@
 package com.example.alkeparking_integrador.modelo
 
+import com.example.alkeparking_integrador.domain.Parking
 import com.example.alkeparking_integrador.modelo.Vehicle
 import com.example.alkeparking_integrador.modelo.VehicleType
 import java.util.*

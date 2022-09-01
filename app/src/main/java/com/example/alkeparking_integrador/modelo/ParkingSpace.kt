@@ -11,6 +11,7 @@ import kotlin.time.toDuration
 const val MINUTES_IN_MILLISECONDS = 60000
 
 data class ParkingSpace(var vehicle: Vehicle) {
+    var fee: Int? = null
     val parkedTime: Long
         get() = (Calendar.getInstance().timeInMillis - vehicle.checkInTime.timeInMillis) / MINUTES_IN_MILLISECONDS
 
@@ -22,34 +23,37 @@ data class ParkingSpace(var vehicle: Vehicle) {
      }
     */
 
-    private fun calculateFee():Int{
+    private fun calculateFee(): Int {
 
         println("time ${vehicle.checkInTime.timeInMillis}  ${Calendar.getInstance().timeInMillis}  La diferencia es ${parkedTime} minutos")
-        if(parkedTime> 120){
-            val plus= ((parkedTime.minutes.minus(120.toDuration(DurationUnit.MINUTES))).div(15.toDuration(DurationUnit.MINUTES)))*5
-            vehicle.discountCard?.let{
-                return ((vehicle.type.value + plus.toInt())-(((vehicle.type.value + plus.toInt())*15)/100))
-            } ?: run{
+        if (parkedTime > 120) {
+            val plus = ((parkedTime.minutes.minus(120.toDuration(DurationUnit.MINUTES))).div(
+                15.toDuration(DurationUnit.MINUTES)
+            )) * 5
+            vehicle.discountCard?.let {
+                return ((vehicle.type.value + plus.toInt()) - (((vehicle.type.value + plus.toInt()) * 15) / 100))
+            } ?: run {
                 return vehicle.type.value + plus.toInt()
             }
-        }else{
-            vehicle.discountCard?.let{
-                return ((vehicle.type.value )-(((vehicle.type.value)*15)/100))
-            } ?: run{
+        } else {
+            vehicle.discountCard?.let {
+                return ((vehicle.type.value) - (((vehicle.type.value) * 15) / 100))
+            } ?: run {
                 return vehicle.type.value
             }
         }
     }
 
-    fun onSuccess(){
-        println("Your fee is ${this.calculateFee()}. Come back soon.PLATE ${vehicle.plate} ")
+    fun onSuccess() {
+        this.fee = calculateFee()
+        println("Your fee is ${this.fee}. Come back soon.PLATE ${vehicle.plate} ")
     }
 
-    fun onError(){
+    fun onError() {
         println("Sorry, the check-out failed PLATE ${vehicle.plate}")
     }
 
-    fun checkOutVehicle(plate:String, operation:() ->Unit){
+    fun checkOutVehicle(plate: String, operation: () -> Unit) {
         operation()
     }
 
