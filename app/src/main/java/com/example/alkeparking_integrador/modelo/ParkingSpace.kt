@@ -28,7 +28,7 @@ data class ParkingSpace(var vehicle: Vehicle) {
     ): Int {
         var fee = vehicleType.value + 5 * ceil(calculateTimeExtra(parkedTime) / 15.0)
         if (discountCard) {
-            fee = ceil(fee * 0.15)
+            fee = ceil(fee * 0.85)
         }
         return fee.toInt()
     }
