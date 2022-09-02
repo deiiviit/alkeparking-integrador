@@ -9,7 +9,7 @@ const val MINUTES_IN_MILLISECONDS = 60000
 data class ParkingSpace(var vehicle: Vehicle) {
 
     //Variable that stores the rate to be paid for each vehicle
-    var fee: Int? = null
+    var fee: Int = 0
 
     // Constant that stores the time of entry of a vehicle
     val parkedTime: Long
@@ -55,8 +55,27 @@ data class ParkingSpace(var vehicle: Vehicle) {
     /**
      * Method that validates the departure of a vehicle
      * @param plate String that it receives to validate if the vehicle is the same
+     * @param onSuccess function call on success comparative
+     * @param onError  function call on failure comparative
+     * @param listPlate list String to comparate with first param
      */
-    fun checkOutVehicle(plate: String) {
+    fun checkOutVehicle(plate: String,onSuccess: (payment: Int) -> Unit, onError: () -> Unit,listPlate:List<String>):String{
+        fee = calculateFee(vehicle.type, parkedTime, vehicle.discountCard != null)
+        return if (listPlate.contains(plate)){
+            onSuccess(fee)
+            plate
+        } else{
+            onError()
+            ""
+        }
+    }
+
+    /*
+    /**
+     * Method that validates the departure of a vehicle
+     * @param plate String that it receives to validate if the vehicle is the same
+     */
+    fun checkOutVehicle2(plate: String) {
         if (vehicle.plate == plate) {
             val fee = calculateFee(vehicle.type, parkedTime, vehicle.discountCard != null)
             onSuccess(fee)
@@ -64,6 +83,8 @@ data class ParkingSpace(var vehicle: Vehicle) {
             onError()
         }
     }
+
+     */
 }
 
 

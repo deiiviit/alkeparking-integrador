@@ -55,18 +55,19 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
      */
     fun removeVehicle(vehicle: Vehicle) {
         val parkingSpace = ParkingSpace(vehicle)
-        val vehicleFound = vehicles.find { it == vehicle }
-        vehicleFound?.let {
-            parkingSpace.checkOutVehicle(it.plate)
-            vehicles.remove(vehicle)
-            updateTotalRecord(parkingSpace)
-        } ?: parkingSpace.onError()
+            //parkingSpace.checkOutVehicle(it.plate)
+            val plateAux=parkingSpace.checkOutVehicle(vehicle.plate, {(parkingSpace.onSuccess(parkingSpace.fee) )}, {parkingSpace.onError()}, this.listVehicles())
+            if (plateAux == vehicle.plate)
+            {
+                vehicles.remove(vehicle)
+                updateTotalRecord(parkingSpace)
+            }
     }
     /**
      * Method that prints a list of plates of the entered vehicles
      */
     fun listVehicles(): List<String> {
-        return vehicles.map { ("${it.plate} ") }
+        return vehicles.map { ("${it.plate}") }
     }
 
     /**

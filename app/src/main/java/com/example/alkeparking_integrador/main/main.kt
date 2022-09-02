@@ -8,7 +8,7 @@ import java.util.*
 fun main() {
     // set fake date to test
     val dateCheckIn = Calendar.getInstance()
-    dateCheckIn.add(Calendar.MINUTE, -120)
+    dateCheckIn.add(Calendar.MINUTE, -135)
     println(dateCheckIn.time)
     val car = Vehicle("AA111AA", VehicleType.CAR, dateCheckIn)
     val car1 = Vehicle("AA111AB", VehicleType.CAR, dateCheckIn, "DISCOUNT_CARD_001")
