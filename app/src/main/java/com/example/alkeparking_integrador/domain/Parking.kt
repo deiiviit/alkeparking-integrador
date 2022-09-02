@@ -3,87 +3,87 @@ package com.example.alkeparking_integrador.domain
 import com.example.alkeparking_integrador.modelo.ParkingSpace
 import com.example.alkeparking_integrador.modelo.Vehicle
 
+// Why do we use vehicles as a Set?
+// Set contains the HashCode function, which makes sure the element is unique
 
-// El set admites unicos, no pueden ver 2 vehiculos en el la misma plate
 
+//Constant to limit the number of vehicles allowed
 const val MAXIMUM_CAPACITY: Int = 20
 
-//Se crea la propiedad total registro y estará inicializada en 0, tanto cantidad de vehiculos salientes como las ganancias
+//Property totalRecord of type Pair where the total number of vehicles that have left the parking lot and the profits will be stored
 var totalRecord: Pair<Int, Int> = Pair(0, 0)
 
 data class Parking(var vehicles: MutableSet<Vehicle>) {
-
-
-    val listParkingSpace = mutableListOf<ParkingSpace>()
-    fun initOrResetParkingSpaces() {
-        vehicles.forEach {
-            val parkingSpaceAux = ParkingSpace(it)
-            listParkingSpace.add(parkingSpaceAux)
-        }
-    }
-
     /**
-     * Metodo encargado de la validacion de la placa y del llamado del método añadir vehiculo
+     * Method in charge of adding a vehicle to the MutableSet
+     *The existence of the vehicle by license plate in the MutableSet is validated
+     * * The maximum number of vehicles that can be held in the parking lot is validated
+     * * @param vehicle Object to add in the MutableSet
+     * @return Boolean true if it could be added successfully or false otherwise
      */
-    fun checkIn(vehicle: Vehicle): String {
-        var filteredVehicles = vehicles.filter { it == vehicle }
-        if (filteredVehicles.isNotEmpty()) {
-            return "Sorry, the has check-in failed"
+    fun addVehicle(vehicle: Vehicle): Boolean {
+        var wasAdded = false
+        if (vehicles.filter { it == vehicle }.isNotEmpty()) {
+            println("Sorry, the has check-in failed")
+            return wasAdded
         }
-        return if (addVehicle(vehicle)) "Welcome to AlkeParking!" else "Sorry, the check-in failed"
-    }
-
-    /**
-     * Metodo encargado de añadir vehiculo al mutableSet de vehiculo
-     */
-    private fun addVehicle(vehicle: Vehicle): Boolean {
         if (vehicles.size < MAXIMUM_CAPACITY) {
-            vehicles.add(vehicle)
-            return true
+            wasAdded = vehicles.add(vehicle)
         }
-        return false
+        checkIn(wasAdded)
+        return wasAdded
     }
-
     /**
-     * Metodo encargado de eliminar un vehiculo del mutableset y  llamar a checkout de parkingSpace
+     * Method that validates if the vehicle was added or not
+     * Method called from addVehicle
+     * @param vehicleAdded Indicates if the vehicle was added
      */
-    fun delVehicle(vehicle: Vehicle): Boolean {
-        var parkingSpace = ParkingSpace(vehicle)
-        if (vehicles.contains(vehicle)) {
-            vehicles.remove(vehicle)
-            parkingSpace?.let {
-                it.checkOutVehicle(vehicle.plate) { it.onSuccess() }
-                updateTotalRecord(it)
-            }
-            return true
+    private fun checkIn(vehicleAdded: Boolean) {
+        if (vehicleAdded) {
+            println("Welcome to AlkeParking!")
         } else {
-            parkingSpace?.let {
-                it.checkOutVehicle(vehicle.plate) { it.onError() }
-            }
-            return false
+            println("Sorry, the check-in failed")
         }
     }
-
     /**
-     * Metodo para listar vehiculos por placa
+     * Method responsible for removing a vehicle from the MutableSet
+     * An instance of parkingSpace is created to call the checkOutVehicle method and calculateFee
+     * .find is used to know if the vehicle that receives the method as an object is in the MutableSet
+     * Through the parkingSpace instance, the checkOutVehicle method is accessed
+     * The vehicle object is removed from the MutableSet
+     * @param vehicle Object to delete in the MutableSet
      */
-    fun listVehicles(): MutableSet<String> {
-        val listPlates = mutableSetOf<String>()
-        vehicles.forEach { listPlates.add(it.plate) }
-        return listPlates
+    fun removeVehicle(vehicle: Vehicle) {
+        val parkingSpace = ParkingSpace(vehicle)
+        val vehicleFound = vehicles.find { it == vehicle }
+        vehicleFound?.let {
+            parkingSpace.checkOutVehicle(it.plate)
+            vehicles.remove(vehicle)
+            updateTotalRecord(parkingSpace)
+        } ?: parkingSpace.onError()
+    }
+    /**
+     * Method that prints a list of plates of the entered vehicles
+     */
+    fun listVehicles(): List<String> {
+        return vehicles.map { ("${it.plate} ") }
     }
 
-
     /**
-     * Se llama el metodo cada vez que se elimine un vehiculo y para obtener las ganancias se encapsulo las ganancias del metodo onSuccess,
-     * que a su vez hace llamado al metodo checkOut
+     * Method that updates the number of vehicles removed from the parking lot with the total earnings
+     *Two variables are used to store the number of withdrawn vehicles and the rate of each of them
      */
-    fun updateTotalRecord(parkingSpace: ParkingSpace) {
-        var totalVehiclesChecked = totalRecord.first + 1
-        var totalEarnings = totalRecord.second + (parkingSpace.fee ?: 0)
+    private fun updateTotalRecord(parkingSpace: ParkingSpace) {
+        val totalVehiclesChecked = totalRecord.first + 1
+        val totalEarnings = totalRecord.second + (parkingSpace.fee ?: 0)
         totalRecord = totalRecord.copy(first = totalVehiclesChecked, second = totalEarnings)
-        println(totalRecord)
     }
-
+    /**
+     * Method that obtains the number of vehicles and the total rate of each one by accessing each field of the pair
+     * Prints a message showing the number of outgoing vehicles and the total earnings
+     */
+    fun getTotalRecord() {
+        println("${totalRecord.first} vehicles have checked out and have earnings of $${totalRecord.second}")
+    }
 }
 
