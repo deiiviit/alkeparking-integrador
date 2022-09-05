@@ -40,7 +40,7 @@ fun main() {
     parking.removeVehicle(moto2)
 
     // print all the vehicles in the parking lot
-    parking.listVehicles().forEachIndexed { index, s -> println("Vehicle $index: Plate  $s") }
+    parking.vehicles.forEach { vehicle -> println(vehicle.plate)  }
 
     parking.getTotalRecord()
 

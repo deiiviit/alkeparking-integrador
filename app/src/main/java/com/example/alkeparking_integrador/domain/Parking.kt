@@ -23,7 +23,7 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
      */
     fun addVehicle(vehicle: Vehicle): Boolean {
         var wasAdded = false
-        if (vehicles.filter { it == vehicle }.isNotEmpty()) {
+        if (vehicle in vehicles) {
             println("Sorry, the has check-in failed")
             return wasAdded
         }
@@ -33,6 +33,7 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
         checkIn(wasAdded)
         return wasAdded
     }
+
     /**
      * Method that validates if the vehicle was added or not
      * Method called from addVehicle
@@ -45,6 +46,7 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
             println("Sorry, the check-in failed")
         }
     }
+
     /**
      * Method responsible for removing a vehicle from the MutableSet
      * An instance of parkingSpace is created to call the checkOutVehicle method and calculateFee
@@ -55,20 +57,25 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
      */
     fun removeVehicle(vehicle: Vehicle) {
         val parkingSpace = ParkingSpace(vehicle)
-            //parkingSpace.checkOutVehicle(it.plate)
-            val plateAux=parkingSpace.checkOutVehicle(vehicle.plate, {(parkingSpace.onSuccess(parkingSpace.fee) )}, {parkingSpace.onError()}, this.listVehicles())
-            if (plateAux == vehicle.plate)
-            {
-                vehicles.remove(vehicle)
-                updateTotalRecord(parkingSpace)
-            }
+        //parkingSpace.checkOutVehicle(it.plate)
+        parkingSpace.checkOutVehicle(
+            vehicle.plate,
+            { (parkingSpace.onSuccess(parkingSpace.fee)) },
+            { parkingSpace.onError() },
+            vehicles
+        )
+        if (vehicles.remove(vehicle)) {
+            vehicles.remove(vehicle)
+            updateTotalRecord(parkingSpace)
+        }
     }
+
     /**
      * Method that prints a list of plates of the entered vehicles
      */
-    fun listVehicles(): List<String> {
-        return vehicles.map { ("${it.plate}") }
-    }
+//    fun listVehicles(): MutableSet<String> {
+//        return vehicles.map { println(vehicles) }.toMutableSet()
+//    }
 
     /**
      * Method that updates the number of vehicles removed from the parking lot with the total earnings
@@ -79,6 +86,7 @@ data class Parking(var vehicles: MutableSet<Vehicle>) {
         val totalEarnings = totalRecord.second + (parkingSpace.fee ?: 0)
         totalRecord = totalRecord.copy(first = totalVehiclesChecked, second = totalEarnings)
     }
+
     /**
      * Method that obtains the number of vehicles and the total rate of each one by accessing each field of the pair
      * Prints a message showing the number of outgoing vehicles and the total earnings

@@ -59,9 +59,9 @@ data class ParkingSpace(var vehicle: Vehicle) {
      * @param onError  function call on failure comparative
      * @param listPlate list String to comparate with first param
      */
-    fun checkOutVehicle(plate: String,onSuccess: (payment: Int) -> Unit, onError: () -> Unit,listPlate:List<String>):String{
+    fun checkOutVehicle(plate: String,onSuccess: (payment: Int) -> Unit, onError: () -> Unit, vehicles: MutableSet<Vehicle>):String{
         fee = calculateFee(vehicle.type, parkedTime, vehicle.discountCard != null)
-        return if (listPlate.contains(plate)){
+        return if(vehicles.contains(vehicle)){
             onSuccess(fee)
             plate
         } else{
